@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 def layer_sizes_test_case():
     np.random.seed(1)
@@ -27,6 +28,21 @@ def forward_propagation_test_case():
 
     return X_assess, parameters
 
+def forward_propagation_test_case_pytorch():
+    np.random.seed(1)
+    np_rand_arr = np.random.randn(2, 3)
+    X_assess = torch.tensor(np_rand_arr, requires_grad=True)
+
+    parameters = {'W1': torch.tensor([[-0.00416758, -0.00056267],
+        [-0.02136196,  0.01640271],
+        [-0.01793436, -0.00841747],
+        [ 0.00502881, -0.01245288]], dtype=torch.float64, requires_grad=True),
+     'W2': torch.tensor([[-0.01057952, -0.00909008,  0.00551454,  0.02292208]], dtype=torch.float64, requires_grad=True),
+     'b1': torch.zeros((4, 1), requires_grad=True),
+     'b2': torch.zeros((1, 1), requires_grad=True)}
+
+    return X_assess, parameters    
+
 def compute_cost_test_case():
     np.random.seed(1)
     Y_assess = np.random.randn(1, 3)
@@ -44,6 +60,28 @@ def compute_cost_test_case():
     a2 = (np.array([[ 0.5002307 ,  0.49985831,  0.50023963]]))
     
     return a2, Y_assess, parameters
+
+def compute_cost_test_case_pytorch():
+    np.random.seed(1)
+    np_rand_arr = np.random.randn(2, 3)
+    X_assess = torch.tensor(np_rand_arr, requires_grad=True)    
+    Y_assess = torch.from_numpy(np.random.randn(1, 3))
+    W1 = torch.tensor([[-0.00416758, -0.00056267],
+        [-0.02136196,  0.01640271],
+        [-0.01793436, -0.00841747],
+        [ 0.00502881, -0.01245288]], dtype=torch.float64, requires_grad=True)
+    W2 = torch.tensor([[-0.01057952, -0.00909008,  0.00551454,  0.02292208]], dtype=torch.float64, requires_grad=True)        
+    b1 = torch.zeros((4, 1), requires_grad=True)
+    b2 = torch.zeros((1, 1), requires_grad=True)     
+    parameters = {'W1': W1, 'W2': W2, 'b1': b1, 'b2': b2}
+
+    Z1 = torch.matmul(W1, X_assess) + b1
+    A1 = torch.tanh(Z1)
+    Z2 = torch.matmul(W2, A1) + b2
+    A2 = torch.sigmoid(Z2)
+    
+    return A2, Y_assess, parameters
+
 
 def backward_propagation_test_case():
     np.random.seed(1)
@@ -70,7 +108,7 @@ def backward_propagation_test_case():
          [-0.02009991,  0.00368692,  0.02884556],
          [ 0.02153007, -0.01385322,  0.02600471]]),
   'Z2': np.array([[ 0.00092281, -0.00056678,  0.00095853]])}
-    return parameters, cache, X_assess, Y_assess
+    return parameters, cache, X_assess, Y_assess  
 
 def update_parameters_test_case():
     parameters = {'W1': np.array([[-0.00615039,  0.0169021 ],
@@ -102,6 +140,12 @@ def nn_model_test_case():
     X_assess = np.random.randn(2, 3)
     Y_assess = np.random.randn(1, 3)
     return X_assess, Y_assess
+
+def nn_model_test_case_pytorch():
+    np.random.seed(1)
+    X_assess = torch.tensor(np.random.randn(2, 3), dtype=torch.float64, requires_grad=True)
+    Y_assess = torch.tensor(np.random.randn(1, 3), dtype=torch.float64)
+    return X_assess, Y_assess    
 
 def predict_test_case():
     np.random.seed(1)
