@@ -1,0 +1,6 @@
+fastai/MnistPlayground/dataset
+DeepLearning_AI/NeuralNetworks/__pycache__
+DeepLearning_AI/__pycache__
+*checkpoint*
+*.iml
+.idea
